@@ -23,7 +23,7 @@ for col in categorical_cols:
     le_dict[col] = le
 
 # FEATURES & TARGET
-X = df.drop("Yield", axis=1)
+X = df.drop(["Yield", "Production"], axis=1)
 y = df["Yield"]
 
 # TRAIN TEST SPLIT
@@ -55,7 +55,7 @@ while True:
         year = 2020
 
         area = 50            # hectares
-        production = 2500    # tons
+        # production = 2500    # tons
         rainfall = 800       # mm
         fertilizer = 120     # kg/ha
         pesticide = 10       # kg/ha
@@ -67,7 +67,7 @@ while True:
 
 
         # Create input
-        input_data = [[crop, year, season, state, area, production, rainfall, fertilizer, pesticide]]
+        input_data = [[crop, year, season, state, area, rainfall, fertilizer, pesticide]]
 
         # Predict
         prediction = model.predict(input_data)

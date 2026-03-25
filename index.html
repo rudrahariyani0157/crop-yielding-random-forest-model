@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Yield Forecaster</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f6f8fa;
+            color: #24292e;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+        
+        header {
+            background-color: #24292e;
+            color: #ffffff;
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .form-section {
+            flex: 1;
+            min-width: 300px;
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 6px;
+            border: 1px solid #e1e4e8;
+            box-shadow: 0 1px 3px rgba(27,31,35,0.04);
+            align-self: flex-start;
+        }
+        
+        .results-section {
+            flex: 1.8;
+            min-width: 300px;
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 6px;
+            border: 1px solid #e1e4e8;
+            box-shadow: 0 1px 3px rgba(27,31,35,0.04);
+            min-height: 400px;
+        }
+        
+        h2 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #24292e;
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 10px;
+        }
+        
+        .input-group {
+            margin-bottom: 16px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 14px;
+            color: #24292e;
+        }
+        
+        select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5da;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #fafbfc;
+            color: #24292e;
+            box-sizing: border-box;
+            line-height: 20px;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #2188ff;
+            box-shadow: 0 0 0 3px rgba(3,102,214,0.3);
+            background-color: #ffffff;
+        }
+        
+        .submit-btn {
+            background-color: #2ea44f;
+            color: white;
+            border: 1px solid rgba(27,31,35,0.15);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 8px;
+            transition: 0.2s background-color cubic-bezier(0.3, 0, 0.5, 1);
+        }
+        
+        .submit-btn:hover {
+            background-color: #2c974b;
+        }
+        
+        .results-content {
+            font-size: 14px;
+            color: #24292e;
+        }
+        
+        .placeholder-text {
+            color: #6a737d;
+            font-style: italic;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        /* Basic text and paragraph styles for AI output */
+        .results-content p {
+            margin-bottom: 16px;
+        }
+        
+        .yield-highlight {
+            background-color: #f1f8ff;
+            color: #0366d6;
+            padding: 12px 16px;
+            border-radius: 4px;
+            border-left: 4px solid #0366d6;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Crop Yield Forecaster</h1>
+    </header>
+
+    <div class="container">
+        
+        <div class="form-section">
+            <h2>Parameters</h2>
+            
+            <form method="POST" action="/predict/">
+                <!-- {% csrf_token %} -->
+                
+                <div class="input-group">
+                    <label for="crop">Crop</label>
+                    <select name="crop" id="crop" required>
+                        <option value="">-- Select --</option>
+                        <option value="Arecanut">Arecanut</option>
+                        <option value="Arhar/Tur">Arhar/Tur</option>
+                        <option value="Bajra">Bajra</option>
+                        <option value="Banana">Banana</option>
+                        <option value="Barley">Barley</option>
+                        <option value="Black pepper">Black pepper</option>
+                        <option value="Cardamom">Cardamom</option>
+                        <option value="Cashewnut">Cashewnut</option>
+                        <option value="Castor seed">Castor seed</option>
+                        <option value="Coconut">Coconut</option>
+                        <option value="Coriander">Coriander</option>
+                        <option value="Cotton(lint)">Cotton(lint)</option>
+                        <option value="Cowpea(Lobia)">Cowpea(Lobia)</option>
+                        <option value="Dry chillies">Dry chillies</option>
+                        <option value="Garlic">Garlic</option>
+                        <option value="Ginger">Ginger</option>
+                        <option value="Gram">Gram</option>
+                        <option value="Groundnut">Groundnut</option>
+                        <option value="Guar seed">Guar seed</option>
+                        <option value="Horse-gram">Horse-gram</option>
+                        <option value="Jowar">Jowar</option>
+                        <option value="Jute">Jute</option>
+                        <option value="Khesari">Khesari</option>
+                        <option value="Linseed">Linseed</option>
+                        <option value="Maize">Maize</option>
+                        <option value="Masoor">Masoor</option>
+                        <option value="Mesta">Mesta</option>
+                        <option value="Moong(Green Gram)">Moong(Green Gram)</option>
+                        <option value="Moth">Moth</option>
+                        <option value="Niger seed">Niger seed</option>
+                        <option value="Oilseeds total">Oilseeds total</option>
+                        <option value="Onion">Onion</option>
+                        <option value="Other  Rabi pulses">Other  Rabi pulses</option>
+                        <option value="Other Cereals">Other Cereals</option>
+                        <option value="Other Kharif pulses">Other Kharif pulses</option>
+                        <option value="Other Summer Pulses">Other Summer Pulses</option>
+                        <option value="Peas &amp; beans (Pulses)">Peas &amp; beans (Pulses)</option>
+                        <option value="Potato">Potato</option>
+                        <option value="Ragi">Ragi</option>
+                        <option value="Rapeseed &amp;Mustard">Rapeseed &amp;Mustard</option>
+                        <option value="Rice">Rice</option>
+                        <option value="Safflower">Safflower</option>
+                        <option value="Sannhamp">Sannhamp</option>
+                        <option value="Sesamum">Sesamum</option>
+                        <option value="Small millets">Small millets</option>
+                        <option value="Soyabean">Soyabean</option>
+                        <option value="Sugarcane">Sugarcane</option>
+                        <option value="Sunflower">Sunflower</option>
+                        <option value="Sweet potato">Sweet potato</option>
+                        <option value="Tapioca">Tapioca</option>
+                        <option value="Tobacco">Tobacco</option>
+                        <option value="Turmeric">Turmeric</option>
+                        <option value="Urad">Urad</option>
+                        <option value="Wheat">Wheat</option>
+                        <option value="other oilseeds">other oilseeds</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="season">Season</label>
+                    <select name="season" id="season" required>
+                        <option value="">-- Select --</option>
+                        <option value="Autumn">Autumn</option>
+                        <option value="Kharif">Kharif</option>
+                        <option value="Rabi">Rabi</option>
+                        <option value="Summer">Summer</option>
+                        <option value="Whole Year">Whole Year</option>
+                        <option value="Winter">Winter</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="state">State</label>
+                    <select name="state" id="state" required>
+                        <option value="">-- Select --</option>
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                        <option value="Assam">Assam</option>
+                        <option value="Bihar">Bihar</option>
+                        <option value="Chhattisgarh">Chhattisgarh</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Goa">Goa</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Haryana">Haryana</option>
+                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                        <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                        <option value="Jharkhand">Jharkhand</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Kerala">Kerala</option>
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Manipur">Manipur</option>
+                        <option value="Meghalaya">Meghalaya</option>
+                        <option value="Mizoram">Mizoram</option>
+                        <option value="Nagaland">Nagaland</option>
+                        <option value="Odisha">Odisha</option>
+                        <option value="Puducherry">Puducherry</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Sikkim">Sikkim</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Telangana">Telangana</option>
+                        <option value="Tripura">Tripura</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Uttarakhand">Uttarakhand</option>
+                        <option value="West Bengal">West Bengal</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="submit-btn">Run Prediction</button>
+            </form>
+        </div>
+        
+        <div class="results-section">
+            <h2>Yield Prediction & Assessment</h2>
+            
+            <div class="results-content">
+                <!-- Django Template Backend Context -->
+                <!-- {% if has_prediction %} -->
+                    <!-- 
+                    <div class="yield-highlight">
+                        Estimated Yield: {{ yield_value }} tons/hectare
+                    </div>
+                    <div class="ai-assessment">
+                        {{ ai_response|linebreaks }}
+                    </div>
+                    -->
+                <!-- {% else %} -->
+                    <div class="placeholder-text">
+                        Select a crop, season, and state to generate an assessment.
+                    </div>
+                <!-- {% endif %} -->
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

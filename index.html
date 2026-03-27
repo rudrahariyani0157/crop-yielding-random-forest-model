@@ -158,14 +158,13 @@
         <div class="form-section">
             <h2>Parameters</h2>
             
-            <form method="POST" action="/predict/">
-                <!-- {% csrf_token %} -->
+            <form method="POST" action="">
+                {% csrf_token %}
                 
                 <div class="input-group">
                     <label for="crop">Crop</label>
                     <select name="crop" id="crop" required>
                         <option value="">-- Select --</option>
-                        <option value="arecanut">Arecanut</option>
                         <option value="arhar/tur">Arhar/Tur</option>
                         <option value="bajra">Bajra</option>
                         <option value="banana">Banana</option>
@@ -174,7 +173,6 @@
                         <option value="cardamom">Cardamom</option>
                         <option value="cashewnut">Cashewnut</option>
                         <option value="castor seed">Castor seed</option>
-                        <option value="coconut">Coconut</option>
                         <option value="coriander">Coriander</option>
                         <option value="cotton(lint)">Cotton(lint)</option>
                         <option value="cowpea(lobia)">Cowpea(Lobia)</option>
@@ -197,14 +195,14 @@
                         <option value="niger seed">Niger seed</option>
                         <option value="oilseeds total">Oilseeds total</option>
                         <option value="onion">Onion</option>
-                        <option value="other  rabi pulses">Other  Rabi pulses</option>
+                        <option value="other  rabi pulses">Other Rabi pulses</option>
                         <option value="other cereals">Other Cereals</option>
                         <option value="other kharif pulses">Other Kharif pulses</option>
                         <option value="other summer pulses">Other Summer Pulses</option>
-                        <option value="peas &amp; beans (pulses)">Peas &amp; beans (Pulses)</option>
+                        <option value="peas & beans (pulses)">Peas & beans (Pulses)</option>
                         <option value="potato">Potato</option>
                         <option value="ragi">Ragi</option>
-                        <option value="rapeseed &amp;mustard">Rapeseed &amp;Mustard</option>
+                        <option value="rapeseed &mustard">Rapeseed & Mustard</option>
                         <option value="rice">Rice</option>
                         <option value="safflower">Safflower</option>
                         <option value="sannhamp">Sannhamp</option>
@@ -219,7 +217,7 @@
                         <option value="turmeric">Turmeric</option>
                         <option value="urad">Urad</option>
                         <option value="wheat">Wheat</option>
-                        <option value="other oilseeds">other oilseeds</option>
+                        <option value="other oilseeds">Other oilseeds</option>
                     </select>
                 </div>
                 
@@ -308,7 +306,7 @@
                     -->
                 <!-- {% else %} -->
                     <div class="placeholder-text">
-                        Select a crop, season, and state to generate an assessment.
+                        {{data}}
                     </div>
                 <!-- {% endif %} -->
             </div>

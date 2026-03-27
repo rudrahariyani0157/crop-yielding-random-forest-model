@@ -1,3 +1,5 @@
+from django.shortcuts import render
+
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
@@ -43,7 +45,6 @@ def datacleaning(csv):
     # Remove duplicates & nulls
     df = df.drop_duplicates().dropna()
     df.to_csv("dataset.csv")
-
 
 def model():
     df = pd.read_csv("dataset.csv")
@@ -166,4 +167,90 @@ def model():
     # print(original_data.head())
 
 # datacleaning()
-model()
+# model()
+
+def index(request):
+    
+    df = pd.read_csv("dataset.csv")
+
+    le_dict = {}
+
+    categorical_cols = ['Crop', 'Season', 'State']
+
+    for col in categorical_cols:
+        le = LabelEncoder()
+        df[col] = le.fit_transform(df[col])
+        le_dict[col] = le
+
+    X = df[['Crop', 'Season', 'State',
+            'Annual_Rainfall', 'Fertilizer_per_ha', 'Pesticide_per_ha']]
+
+    y = df['Yield']
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
+
+    model = RandomForestRegressor(
+        n_estimators=150,
+        max_depth=15,
+        random_state=42
+    )
+
+    model.fit(X_train, y_train)
+
+
+    y_pred = model.predict(X_test)
+
+    print("MAE:", mean_absolute_error(y_test, y_pred))
+    print("R2 Score:", r2_score(y_test, y_pred))
+
+    if request.method == "POST":
+        print("start...")
+        crop = request.POST.get("crop")
+        season = request.POST.get("season")
+        state = request.POST.get("state")
+        Annual_Rainfall = request.POST.get("Annual_Rainfall")
+        Fertilizer_per_ha = request.POST.get("Fertilizer_per_ha")
+        Pesticide_per_ha = request.POST.get("Pesticide_per_ha")
+
+        print("Crop:", crop)
+        print("Season:", season)
+        print("State:", state)
+        print("Rainfall:", Annual_Rainfall)
+        print("Fertilizer:", Fertilizer_per_ha)
+        print("Pesticide:", Pesticide_per_ha)
+
+        sample = { 
+            'Crop': crop,
+            'Season': season,
+            'State': state,
+            'Annual_Rainfall': Annual_Rainfall,
+            'Fertilizer_per_ha': Fertilizer_per_ha,
+            'Pesticide_per_ha': Pesticide_per_ha
+        }
+
+        # Convert to DataFrame
+        sample_df = pd.DataFrame([sample])
+
+        # Apply same encoding
+        for col in categorical_cols:
+            le = le_dict[col]
+            sample_df[col] = le.transform(sample_df[col])
+
+        # Predict
+        prediction = model.predict(sample_df)
+        data=(f"\n🌾 Predicted Yield: {prediction[0]:.2f} tons per hectare (t/ha)")
+
+        print(f"\n🌾 Predicted Yield: {prediction[0]:.2f} tons per hectare (t/ha)")
+
+        context={
+        "data": data
+        }
+    else:
+        context={
+        "data": "Enter required data"
+        }
+
+        
+    return render(request, 'index.html', context)
